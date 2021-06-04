@@ -2,6 +2,7 @@ package com.jpa.RegisterandLogin.service;
 
 import java.util.Optional;
 
+import com.jpa.RegisterandLogin.entities.Benificiary;
 import com.jpa.RegisterandLogin.entities.LoginStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,24 +17,22 @@ import com.jpa.RegisterandLogin.exception.UserNotFoundException;
 public class AccountService {
 
     @Autowired
-    AccountRepository accountrepository;
+    AccountRepository accountRepository;
 
     @Autowired
     UserRepository userrepository;
 
-    public ResponseEntity saveAccountInfo(Account account) throws UserNotFoundException {
-        Optional<User> userId = userrepository.findById(account.getUserid());
-        if (userId.isPresent() && LoginStatus.Success.equals(userId.get().getLoginStatus())) {
-            accountrepository.save(account);
-            return new ResponseEntity("Save Account Information Successfully", HttpStatus.OK);
-        }
-        throw new UserNotFoundException();
-    }
+    @Autowired
+    BenificiaryRepository benificiaryRepository;
 
 
     public Account updateBalance(Double minusBalance, Long accountNo) {
-        Account account = accountrepository.findByAccountNumber(accountNo);
-        account.setBalance(minusBalance);
-        return accountrepository.save(account);
+        Optional<Account> account = accountRepository.findById(accountNo);
+        if (account.isPresent()) {
+            Account account1 = account.get();
+            account1.setBalance(minusBalance);
+            return accountRepository.saveAndFlush(account1);
+        }
+        return null;
     }
 }

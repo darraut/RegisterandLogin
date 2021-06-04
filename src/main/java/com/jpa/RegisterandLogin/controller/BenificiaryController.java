@@ -1,26 +1,39 @@
 package com.jpa.RegisterandLogin.controller;
 
+import com.jpa.RegisterandLogin.DTO.BenificaryDTO;
+import com.jpa.RegisterandLogin.entities.User;
+import com.jpa.RegisterandLogin.service.BenificiaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.jpa.RegisterandLogin.entities.Benificiary;
 import com.jpa.RegisterandLogin.service.BenificiaryService;
 
+import java.io.Serializable;
+
 @RestController
 @RequestMapping("/benificiary")
-public class BenificiaryController {
+public class BenificiaryController  {
 
 	@Autowired
 	BenificiaryService benificiaryService;
+	@Autowired
+	BenificiaryRepository benificiaryRepository;
 	
 	
-	@PostMapping("/save")
-	Benificiary saveBenificiary(@RequestBody Benificiary benificiary) {
-		return benificiaryService.saveBenificiary(benificiary);
+	@PostMapping("/add")
+	ResponseEntity addBenificary(@RequestBody BenificaryDTO benificiary) {
+		return benificiaryService.addBenificary(benificiary);
 		
 	}
+
+	@GetMapping("get/{benificaryaccountno}")
+	ResponseEntity getBenificary(@PathVariable(required = true,value = "benificaryaccountno")Long benificaryAcc){
+			return benificiaryService.getBenificary(benificaryAcc);
+		}
+
+
 
 }

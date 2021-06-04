@@ -1,12 +1,23 @@
 package com.jpa.RegisterandLogin.exception;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class ExceptionResponse {
 
     private String message;
     private LocalDateTime dateTime;
     private String errorCode;
+
+    public Map<String, String> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, String> map) {
+        this.map = map;
+    }
+
+    private Map<String,String> map;
 
     public String getErrorCode() {
         return errorCode;

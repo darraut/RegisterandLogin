@@ -1,6 +1,9 @@
 package com.jpa.RegisterandLogin.service;
 
+import com.jpa.RegisterandLogin.DTO.FundTransferDTO;
+import com.jpa.RegisterandLogin.entities.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import com.jpa.RegisterandLogin.entities.Benificiary;
@@ -8,9 +11,10 @@ import com.jpa.RegisterandLogin.entities.Benificiary;
 @Repository
 public interface BenificiaryRepository extends JpaRepository<Benificiary, Long> {
 
-	Benificiary findByUserId(Long userId);
 
-    Benificiary findByAccountNo(Long toAccount);
+     Benificiary findByBenificaryAccount(Long benificaryAccount);
 
-    Benificiary findByAccountNoAndUserId(Long toAccount, Long userId);
+    Benificiary findByAccountNoAndBenificaryAccount(Account accountNo, Long benificaryAccount);
+
+    Benificiary findByAccountNo(Account accountNo);
 }

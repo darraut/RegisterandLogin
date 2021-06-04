@@ -1,13 +1,11 @@
 package com.jpa.RegisterandLogin.service;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.validation.Valid;
 
+import com.jpa.RegisterandLogin.DTO.UserDTO;
 import com.jpa.RegisterandLogin.entities.Account;
 import com.jpa.RegisterandLogin.entities.LoginStatus;
 import org.apache.commons.lang3.StringUtils;
@@ -32,32 +30,41 @@ public class UserService {
     @Autowired
     AccountRepository accountRepository;
 
-    public ResponseEntity signUpNewUser(User user) throws EmailAndUserNameValidationException {
-        if (StringUtils.isNotBlank(user.getEmail())) {
-            User newUser = userRepository.findOneByEmailAndUserName(user.getEmail(), user.getUserName());
+    public ResponseEntity signUpNewUser(UserDTO user) throws EmailAndUserNameValidationException {
+        if (StringUtils.isNotBlank(user.getUser().getEmail())) {
+            User newUser = userRepository.findOneByEmailAndUserName(user.getUser().getEmail(), user.getUser().getUserName());
             if (newUser != null) {
-                if (newUser.getEmail().equals(user.getEmail()) || newUser.getUserName().equals(user.getUserName()))
+                if (newUser.getEmail().equals(user.getUser().getEmail()) || newUser.getUserName().equals(user.getUser().getUserName()))
                     throw new EmailAndUserNameValidationException();
             }
-            userRepository.save(user);
+            User userDetails = new User();
+            userDetails.setEmail(user.getUser().getEmail());
+            userDetails.setCountry(user.getUser().getCountry());
+            userDetails.setPassword(user.getUser().getPassword());
+            userDetails.setUserName(user.getUser().getUserName());
+            Account account = new Account();
+            account.setBalance(user.getBalance());
+            account.setBankName(user.getBankName());
+            userDetails.setAccount(account);
+            account.setUser(userDetails);
+            userRepository.save(userDetails);
         }
         return new ResponseEntity<>("user Successfully Register", HttpStatus.OK);
     }
 
 
-    public ResponseEntity loginUser(String email, String password) {
+    public ResponseEntity loginUser(String email, String password) throws UserNotFoundException {
         User user = userRepository.findByEmailAndPassword(email, password);
-        if (user == null) {
+        if(user==null)
             throw new UserNotFoundException();
-        } else if (user.getEmail().equals(email) && password.equals(user.getPassword())) {
+         else if (user.getEmail().equals(email) && password.equals(user.getPassword())) {
             user.setLoginStatus(LoginStatus.Success);
             userRepository.save(user);
-         }
-        else
-        {
+            return new ResponseEntity("User Successfully Login", HttpStatus.OK);
+        } else {
             user.setLoginStatus(LoginStatus.Fail);
+            throw new RuntimeException();
         }
-        return new ResponseEntity("User Successfully Login", HttpStatus.OK);
     }
 
 
@@ -69,17 +76,12 @@ public class UserService {
             Map<String, Object> data = new HashMap<>();
             data.put("userName",user.getUserName());
             data.put("userEmail",user.getEmail());
-            data.put("city",user.getCity());
-            data.put("age",user.getAge());
-            Account account = accountRepository.findByUserId(user.getUserId());
-            if(account !=null) {
-                data.put("userAccountNo", account.getAccountNumber());
-                data.put("balance", account.getBalance());
-            }
+            Long user1= accountRepository.findByUser(user).getUserId();
             userAccountInfo.add(data);
         }
         return new  ResponseEntity(userAccountInfo,HttpStatus.OK);
     }
+
 }
 
 

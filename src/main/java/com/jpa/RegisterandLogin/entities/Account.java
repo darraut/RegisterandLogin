@@ -2,95 +2,55 @@ package com.jpa.RegisterandLogin.entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
-
+@Data
 @Entity
-@Table(name = "accountdetails")
+@Table(name = "tb_account")
 public class Account {
-	
-	
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountId;
+    private Long accountNo;
 
     @Column
-    private Long accountNumber;
-
-    @Column
-    private String ifcsCode;
+    private String bankName;
 
     @Column
     private double balance;
 
-    @Column
-    private Long userId;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId")
+    private User user;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "accountNo")
+    //@JoinColumn(name = "benificary_acc", referencedColumnName ="accountNo" )
+    private Set<Benificiary> benificiryAccountList;
 
-   /* @OneToMany(cascade = CascadeType.ALL ,orphanRemoval = true)
-    @JoinColumn(name = "beneficiaryAccount",referencedColumnName = "accountId")
-    private List<Benificiary> beneficiaryAccounts;
-
-
-    public List<Benificiary> getBeneficiaryAccounts() {
-        return beneficiaryAccounts;
-    }
-
-    public void setBeneficiaryAccounts(List<Benificiary> beneficiaryAccounts) {
-        this.beneficiaryAccounts = beneficiaryAccounts;
-    }*/
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-
-    public Long getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(Long accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public String getIfcsCode() {
-        return ifcsCode;
-    }
-
-    public void setIfcsCode(String ifcsCode) {
-        this.ifcsCode = ifcsCode;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
+    public Account(Long accountNo, String bankName, double balance, User user) {
+        this.accountNo = accountNo;
+        this.bankName = bankName;
         this.balance = balance;
-    }
-
-    public Long getUserid() {
-        return userId;
-    }
-
-    public void setUserid(Long userId) {
-        this.userId = userId;
-    }
-
-    public Account(Long accountId, Long accountNumber, String ifcsCode, double balance, Long userId) {
-        this.accountId = accountId;
-        this.accountNumber = accountNumber;
-        this.ifcsCode = ifcsCode;
-        this.balance = balance;
-        this.userId = userId;
-
+        this.user = user;
     }
 
     public Account() {
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountNo=" + accountNo +
+                ", bankName='" + bankName + '\'' +
+                ", balance=" + balance +
+                ", user=" + user +
+                ", benificiryAccountList=" + benificiryAccountList +
+                '}';
     }
 }

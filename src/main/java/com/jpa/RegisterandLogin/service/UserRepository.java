@@ -6,8 +6,6 @@ import com.jpa.RegisterandLogin.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	
-
 	User findOneByEmailAndUserName(String email, String userName);
 
 	User findByEmailAndPassword(String email, String password);

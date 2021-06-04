@@ -15,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.DelegatingServerHttpResponse;
 import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -27,10 +24,8 @@ public class TransactionService {
 
 	@Autowired
 	BenificiaryRepository benificiaryRepository;
-
 	@Autowired
 	AccountRepository accountRepository;
-
 	@Autowired
 	AccountService accountService;
 	@Autowired
@@ -42,7 +37,7 @@ public class TransactionService {
 
 
 	public ResponseEntity fundTransfer(FundTransferDTO fundTransferDTO) throws UserNotFoundException {
-		Optional<User> userid = userRepository.findById(fundTransferDTO.getAccountNo()).filter(u->u.getLoginStatus().equals(LoginStatus.Success));
+		Optional<User> userid = Optional.of(userRepository.findById(fundTransferDTO.getAccountNo()).filter(u -> u.getLoginStatus().equals(LoginStatus.Success)).get());
 		if(userid.isPresent()) {
 			Account accountNo = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo());
 			Benificiary benificiary = benificiaryRepository.findByAccountNoAndBenificaryAccount(accountNo, fundTransferDTO.getBenificaryAccount());

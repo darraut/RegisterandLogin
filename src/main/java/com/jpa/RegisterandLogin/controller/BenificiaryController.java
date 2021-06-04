@@ -18,9 +18,9 @@ import java.io.Serializable;
 public class BenificiaryController  {
 
 	@Autowired
-	BenificiaryService benificiaryService;
+	 private BenificiaryService benificiaryService;
 	@Autowired
-	BenificiaryRepository benificiaryRepository;
+	private BenificiaryRepository benificiaryRepository;
 	
 	
 	@PostMapping("/add")

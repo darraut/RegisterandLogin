@@ -50,8 +50,9 @@ public class BenificiaryService {
     }
 
 
-    public ResponseEntity getBenificary(Long benificaryAcc) {
-        Benificiary benificaryAccount = benificiaryRepository.findByBenificaryAccount(benificaryAcc);
+    public ResponseEntity getBenificary(Long benificaryAcc,Long accountNo) {
+        Account account = accountRepository.findByAccountNo(accountNo);
+        Benificiary benificaryAccount = benificiaryRepository.findByAccountNoAndBenificaryAccount(account,benificaryAcc);
         if (benificaryAccount != null) {
             Map<String, Object> benificaryDetails = new HashMap<>();
             benificaryDetails.put("benificaryAccountNo", benificaryAccount.getBenificaryAccount());

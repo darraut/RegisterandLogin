@@ -16,7 +16,6 @@ com\jpa\RegisterandLogin\exception\EmailAndUserNameValidationException.class
 com\jpa\RegisterandLogin\entities\Transaction.class
 com\jpa\RegisterandLogin\service\AccountRepository.class
 com\jpa\RegisterandLogin\controller\TransactionController.class
-com\jpa\RegisterandLogin\controller\AccountController.class
 com\jpa\RegisterandLogin\exception\BalanceInefficient.class
 com\jpa\RegisterandLogin\service\BenificiaryService.class
 com\jpa\RegisterandLogin\controller\BenificiaryController.class

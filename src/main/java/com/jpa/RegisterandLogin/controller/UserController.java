@@ -22,14 +22,14 @@ import com.jpa.RegisterandLogin.service.UserService;
 
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("/api/user")
 public class UserController {
 
 	@Autowired
 	private UserService userService;
 
 	@PostMapping("/signUp")
-	public ResponseEntity signUpNewUser(@Valid @RequestBody UserDTO user) {
+	public ResponseEntity<User> signUpNewUser(@Valid @RequestBody UserDTO user) {
 		return userService.signUpNewUser(user);
 	}
 

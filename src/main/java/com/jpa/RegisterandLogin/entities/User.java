@@ -48,18 +48,21 @@ public class User {
                 + country + "]";
     }
 
-    public User(Long userId, Long accountId, String userName, String password,
-                @Email(message = "Length should not exceed more than 30") String email,
-                 String country, LoginStatus loginStatus) {
-        super();
+    public User(Long userId, String userName, String password, @Email(message = "Email Should be in a Email format") String email, String country, Account account, LoginStatus loginStatus) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
         this.email = email;
         this.country = country;
+        this.account = account;
         this.loginStatus = loginStatus;
     }
 
     public User() {
+    }
+
+    public User(@Email(message = "Email Should be in a Email format") String email,String password) {
+        this.email = email;
+        this.password = password;
     }
 }

@@ -30,7 +30,7 @@ public class UserService {
     @Autowired
     AccountRepository accountRepository;
 
-    public ResponseEntity signUpNewUser(UserDTO user) throws EmailAndUserNameValidationException {
+    public ResponseEntity<User> signUpNewUser(UserDTO user) throws EmailAndUserNameValidationException {
         if (StringUtils.isNotBlank(user.getUser().getEmail())) {
             User newUser = userRepository.findOneByEmailAndUserName(user.getUser().getEmail(), user.getUser().getUserName());
             if (newUser != null) {
@@ -49,7 +49,7 @@ public class UserService {
             account.setUser(userDetails);
             userRepository.save(userDetails);
         }
-        return new ResponseEntity<>("user Successfully Register", HttpStatus.OK);
+        return new ResponseEntity("user Register SuccessFully",HttpStatus.OK);
     }
 
 
@@ -57,11 +57,12 @@ public class UserService {
         User user = userRepository.findByEmailAndPassword(email, password);
         if(user==null)
             throw new UserNotFoundException();
-         else if (user.getEmail().equals(email) && password.equals(user.getPassword())) {
+        else if (user.getEmail().equals(email) && password.equals(user.getPassword())) {
             user.setLoginStatus(LoginStatus.Success);
             userRepository.save(user);
             return new ResponseEntity("User Successfully Login", HttpStatus.OK);
-        } else {
+        }
+        else {
             user.setLoginStatus(LoginStatus.Fail);
             throw new RuntimeException();
         }
@@ -76,7 +77,7 @@ public class UserService {
             Map<String, Object> data = new HashMap<>();
             data.put("userName",user.getUserName());
             data.put("userEmail",user.getEmail());
-            Long user1= accountRepository.findByUser(user).getUserId();
+            accountRepository.findByUser(user).getUserId();
             userAccountInfo.add(data);
         }
         return new  ResponseEntity(userAccountInfo,HttpStatus.OK);

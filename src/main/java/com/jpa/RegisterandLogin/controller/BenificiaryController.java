@@ -21,7 +21,7 @@ public class BenificiaryController  {
 	 private BenificiaryService benificiaryService;
 	@Autowired
 	private BenificiaryRepository benificiaryRepository;
-	
+
 	
 	@PostMapping("/add")
 	ResponseEntity addBenificary(@RequestBody BenificaryDTO benificiary) {
@@ -29,9 +29,10 @@ public class BenificiaryController  {
 		
 	}
 
-	@GetMapping("get/{benificaryaccountno}")
-	ResponseEntity getBenificary(@PathVariable(required = true,value = "benificaryaccountno")Long benificaryAcc){
-			return benificiaryService.getBenificary(benificaryAcc);
+	@GetMapping("get/{benificaryaccountno}/{accountno}")
+	ResponseEntity getBenificary(@PathVariable(required = true,value = "benificaryaccountno")Long benificaryAcc,
+								 @PathVariable(required = true,value = "accountno")Long accountNo){
+			return benificiaryService.getBenificary(benificaryAcc,accountNo);
 		}
 
 

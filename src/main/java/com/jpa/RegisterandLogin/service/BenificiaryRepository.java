@@ -12,9 +12,10 @@ import com.jpa.RegisterandLogin.entities.Benificiary;
 public interface BenificiaryRepository extends JpaRepository<Benificiary, Long> {
 
 
-     Benificiary findByBenificaryAccount(Long benificaryAccount);
+    Benificiary findByBenificaryAccount(Long benificaryAccount);
 
     Benificiary findByAccountNoAndBenificaryAccount(Account accountNo, Long benificaryAccount);
 
     Benificiary findByAccountNo(Account accountNo);
+
 }

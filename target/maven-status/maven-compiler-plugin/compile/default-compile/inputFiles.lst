@@ -10,7 +10,6 @@ D:\Assignment springboot&microservices\java_workplace\src\main\java\com\jpa\Regi
 D:\Assignment springboot&microservices\java_workplace\src\main\java\com\jpa\RegisterandLogin\exception\AccountNotFoundException.java
 D:\Assignment springboot&microservices\java_workplace\src\main\java\com\jpa\RegisterandLogin\service\UserRepository.java
 D:\Assignment springboot&microservices\java_workplace\src\main\java\com\jpa\RegisterandLogin\entities\Transaction.java
-D:\Assignment springboot&microservices\java_workplace\src\main\java\com\jpa\RegisterandLogin\controller\AccountController.java
 D:\Assignment springboot&microservices\java_workplace\src\main\java\com\jpa\RegisterandLogin\service\TransactionService.java
 D:\Assignment springboot&microservices\java_workplace\src\main\java\com\jpa\RegisterandLogin\entities\Benificiary.java
 D:\Assignment springboot&microservices\java_workplace\src\main\java\com\jpa\RegisterandLogin\service\TransactionRepository.java

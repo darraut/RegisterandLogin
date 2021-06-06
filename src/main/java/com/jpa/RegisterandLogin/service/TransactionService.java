@@ -33,7 +33,7 @@ public class TransactionService {
 	@Autowired
 	TransactionRepository transactionRepository;
 
-	public static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	 private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 
 	public ResponseEntity fundTransfer(FundTransferDTO fundTransferDTO) throws UserNotFoundException {

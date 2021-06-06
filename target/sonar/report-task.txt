@@ -2,5 +2,5 @@ projectKey=com.jpa:RegisterandLogin
 serverUrl=http://localhost:9000
 serverVersion=8.5.1.38104
 dashboardUrl=http://localhost:9000/dashboard?id=com.jpa%3ARegisterandLogin
-ceTaskId=AXniEl8tBTKC_jOsMzVt
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AXniEl8tBTKC_jOsMzVt
+ceTaskId=AXniqvI2BTKC_jOsMzVu
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXniqvI2BTKC_jOsMzVu

@@ -35,7 +35,7 @@ public class TransactionController {
 	}
 
 	@GetMapping("/all/pagination/sort")
-	public ResponseEntity getAllTransaction(@RequestParam(required = true, value = "searchstr") String searchStr,
+	public ResponseEntity getAllTransaction(@RequestParam(required = false, value = "searchstr") String searchStr,
 											@RequestParam(required = false, value = "sortby") String sortBy,
 											@RequestParam(required = true, value = "pagenumber") int pageNumber,
 											@RequestParam(required = true, value = "size") int size,

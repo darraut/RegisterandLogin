@@ -23,6 +23,7 @@ public class Benificiary  {
 	@Column
 	private String bankname;
 
+	@Column
 	private Double creditAmount;
 
 

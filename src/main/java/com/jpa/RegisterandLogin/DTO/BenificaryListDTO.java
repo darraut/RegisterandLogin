@@ -1,5 +1,6 @@
 package com.jpa.RegisterandLogin.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -7,6 +8,7 @@ import javax.persistence.Column;
 public class BenificaryListDTO {
     private String bankName;
 
+    @JsonIgnore
     private Double creditAmount;
 
     private Double balance;

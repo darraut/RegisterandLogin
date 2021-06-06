@@ -32,7 +32,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         ExceptionResponse response = new ExceptionResponse();
         response.setDateTime(LocalDateTime.now());
         response.setMessage("User Not Found ");
-        response.setErrorCode("404");
+        response.setErrorCode("401");
         ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         return entity;
     }
@@ -42,8 +42,8 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleExceptions(EmailAndUserNameValidationException exception, WebRequest webRequest) {
         ExceptionResponse response = new ExceptionResponse();
         response.setDateTime(LocalDateTime.now());
-        response.setMessage("please Check Username & Email");
-        response.setErrorCode("400");
+        response.setMessage("Email or Username Already Exits");
+        response.setErrorCode("402");
         ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         return entity;
     }
@@ -52,7 +52,16 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         ExceptionResponse response = new ExceptionResponse();
         response.setDateTime(LocalDateTime.now());
         response.setMessage("Account Not Found Exception");
-        response.setErrorCode("400");
+        response.setErrorCode("404");
+        ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return entity;
+    }
+    @ExceptionHandler(BenificaryAccountException.class)
+    public ResponseEntity<Object> BenificaryAccountException(BenificaryAccountException exception, WebRequest webRequest) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setDateTime(LocalDateTime.now());
+        response.setMessage("Benificary Account Already exist for that User");
+        response.setErrorCode("404");
         ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         return entity;
     }
@@ -63,7 +72,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         ExceptionResponse response = new ExceptionResponse();
         response.setDateTime(LocalDateTime.now());
         response.setMessage("Inefficient balance please check Balance");
-        response.setErrorCode("400");
+        response.setErrorCode("404");
         ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         return entity;
     }
@@ -91,4 +100,5 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         return entity;
     }
+
 }

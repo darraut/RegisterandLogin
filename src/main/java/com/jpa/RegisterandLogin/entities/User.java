@@ -48,13 +48,12 @@ public class User {
                 + country + "]";
     }
 
-    public User(Long userId, String userName, String password, @Email(message = "Email Should be in a Email format") String email, String country, Account account, LoginStatus loginStatus) {
+    public User(Long userId, String userName, String password, @Email(message = "Email Should be in a Email format") String email, String country, LoginStatus loginStatus) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
         this.email = email;
         this.country = country;
-        this.account = account;
         this.loginStatus = loginStatus;
     }
 
@@ -65,4 +64,5 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
 }

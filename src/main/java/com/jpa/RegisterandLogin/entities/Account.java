@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ public class Account {
     private Long accountNo;
 
     @Column
+    @NotNull
     private String bankName;
 
     @Column
@@ -30,7 +32,6 @@ public class Account {
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "accountNo")
-    //@JoinColumn(name = "benificary_acc", referencedColumnName ="accountNo" )
     private Set<Benificiary> benificiryAccountList;
 
     public Account(Long accountNo, String bankName, double balance, User user) {
@@ -43,14 +44,4 @@ public class Account {
     public Account() {
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "accountNo=" + accountNo +
-                ", bankName='" + bankName + '\'' +
-                ", balance=" + balance +
-                ", user=" + user +
-                ", benificiryAccountList=" + benificiryAccountList +
-                '}';
-    }
 }

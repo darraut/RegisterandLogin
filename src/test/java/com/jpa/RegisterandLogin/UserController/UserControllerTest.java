@@ -4,15 +4,20 @@ package com.jpa.RegisterandLogin.UserController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpa.RegisterandLogin.DTO.UserDTO;
+import com.jpa.RegisterandLogin.controller.UserController;
 import com.jpa.RegisterandLogin.entities.LoginStatus;
 import com.jpa.RegisterandLogin.entities.User;
+import com.jpa.RegisterandLogin.exception.GlobalException;
+import com.jpa.RegisterandLogin.exception.UserNotFoundException;
 import com.jpa.RegisterandLogin.service.UserService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.Assert;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalMatchers;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.mockito.internal.matchers.Matches;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -28,13 +33,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javax.validation.constraints.Email;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestMethodOrder(OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -45,6 +56,9 @@ class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    private UserController userController;
+
+
 
 
     @Test
@@ -53,36 +67,58 @@ class UserControllerTest {
         UserDTO userDTO= new UserDTO();
         userDTO.setBankName("ICICI");
         userDTO.setBalance(2000.00);
-        User newUser=new User(1L,"Darshan","Darshan@123","Darshan@123","IN",null,LoginStatus.Success);
+        User newUser=new User(1L,"Darshan","Darshan@123","Darshan@123","IN",LoginStatus.Success);
         userDTO.setUser(newUser);
         ResponseEntity<User> entity =new ResponseEntity(HttpStatus.OK);
-        String inputInJson = this.mapToJson(newUser);
         String URI = "/api/user/signUp";
-        Mockito.when(userService.signUpNewUser(Mockito.any(UserDTO.class))).thenReturn(entity);
+        Mockito.when(userService.signUpNewUser(any(UserDTO.class))).thenReturn(entity);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post(URI)
-                .accept(MediaType.APPLICATION_JSON).content(inputInJson)
-                .contentType(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON).content(mapToJson(newUser)).contentType(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        MockHttpServletResponse response = result.getResponse();
+        MockHttpServletResponse response
+                = result.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+    @Test
+    @DisplayName("Registration : Positive scenario")
+    void signUpNewUser1() throws Exception {
+        UserDTO userDTO= new UserDTO();
+        userDTO.setBankName("ICICI");
+        userDTO.setBalance(2000.00);
+        User newUser=new User(1L,"Darshan","Darshan@123","Darshan@123","IN",LoginStatus.Success);
+        userDTO.setUser(newUser);
+        ResponseEntity<User> entity =new ResponseEntity(newUser,HttpStatus.OK);
+
+        Mockito.when(userService.signUpNewUser(any())).thenReturn(entity);
+        ResponseEntity<User>responseEntity=userService.signUpNewUser(userDTO);
+        assertEquals(newUser,userDTO.getUser());
+        assertEquals(responseEntity.getStatusCodeValue(),HttpStatus.OK.value());
+
     }
     @Test
     @DisplayName("Login : Positive scenario")
     void loginUser() throws Exception {
-        User user = new User("Ajay@gmail.com","Ajay@123");
-        ResponseEntity<User> entity =new ResponseEntity(HttpStatus.OK);
-        String inputInJson = this.mapToJson(user);
-        String URI = "/api/user/login";
-        Mockito.when(userService.loginUser(user.getEmail(),user.getPassword())).thenReturn(entity);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get(URI)
-                .accept(MediaType.APPLICATION_JSON).content(inputInJson)
-                .contentType(MediaType.APPLICATION_JSON);
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        MockHttpServletResponse response = result.getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        User user=new User("Darshan@gmail.com","Darshan@123");
+        Mockito.when(userService.loginUser(any(),any())).thenReturn(user);
+        User newUser= userService.loginUser("Darshan@gmail.com","Darshan@123");
+        assertNotNull(newUser);
+        assertEquals(user.getEmail(),newUser.getEmail());
+        assertEquals(user.getPassword(),newUser.getPassword());
+        assertEquals(user,newUser);
     }
+
+    @Test
+    @DisplayName("Login : Negative scenario")
+    void loginUserFail() {
+        User user=new User("","Darshan@123");
+        Mockito.when(userService.loginUser(notNull(),notNull())).thenReturn(user);
+        User newUser= userService.loginUser("","Darshan@123");
+        assertSame(user,newUser);
+    }
+
+
+
 
 
 

@@ -17,7 +17,7 @@ public class Transaction extends BaseEntitySeq {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountID;
+    private Long transactionId;
 
     @Column
     private Long accountNo;
@@ -39,8 +39,8 @@ public class Transaction extends BaseEntitySeq {
 
     }
 
-	public Transaction(Long accountID, Long accountNo, String bankname, Double balance, Long benificaryAccount, Double transferAmount) {
-		this.accountID = accountID;
+	public Transaction(Long transactionId, Long accountNo, String bankname, Double balance, Long benificaryAccount, Double transferAmount) {
+		this.transactionId = transactionId;
 		this.accountNo = accountNo;
 		this.bankname = bankname;
 		this.balance = balance;

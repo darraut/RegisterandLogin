@@ -33,7 +33,7 @@ public class BenificiaryController  {
 	ResponseEntity getBenificary(@PathVariable(required = true,value = "benificaryaccountno")Long benificaryAcc,
 								 @PathVariable(required = true,value = "accountno")Long accountNo){
 			return benificiaryService.getBenificary(benificaryAcc,accountNo);
-		}
+	}
 
 
 

@@ -20,6 +20,7 @@ com\jpa\RegisterandLogin\exception\BalanceInefficient.class
 com\jpa\RegisterandLogin\service\BenificiaryService.class
 com\jpa\RegisterandLogin\controller\BenificiaryController.class
 com\jpa\RegisterandLogin\controller\UserController.class
+com\jpa\RegisterandLogin\exception\BenificaryAccountException.class
 com\jpa\RegisterandLogin\exception\AccountNotFoundException.class
 com\jpa\RegisterandLogin\service\BenificiaryRepository.class
 com\jpa\RegisterandLogin\exception\GlobalException.class

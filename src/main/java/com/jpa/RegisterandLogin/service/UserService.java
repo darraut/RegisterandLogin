@@ -2,12 +2,15 @@ package com.jpa.RegisterandLogin.service;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import com.jpa.RegisterandLogin.DTO.UserDTO;
 import com.jpa.RegisterandLogin.entities.Account;
+import com.jpa.RegisterandLogin.entities.Benificiary;
 import com.jpa.RegisterandLogin.entities.LoginStatus;
+import com.jpa.RegisterandLogin.exception.AccountNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,9 @@ public class UserService {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    BenificiaryRepository benificiaryRepository;
+
     public ResponseEntity<User> signUpNewUser(UserDTO user) throws EmailAndUserNameValidationException {
         if (StringUtils.isNotBlank(user.getUser().getEmail())) {
             User newUser = userRepository.findOneByEmailAndUserName(user.getUser().getEmail(), user.getUser().getUserName());
@@ -48,19 +54,20 @@ public class UserService {
             userDetails.setAccount(account);
             account.setUser(userDetails);
             userRepository.save(userDetails);
+            return new ResponseEntity("user Register SuccessFully",HttpStatus.OK);
         }
-        return new ResponseEntity("user Register SuccessFully",HttpStatus.OK);
+        throw new RuntimeException();
     }
 
 
-    public ResponseEntity loginUser(String email, String password) throws UserNotFoundException {
+    public User loginUser(String email, String password) throws UserNotFoundException {
         User user = userRepository.findByEmailAndPassword(email, password);
         if(user==null)
             throw new UserNotFoundException();
         else if (user.getEmail().equals(email) && password.equals(user.getPassword())) {
             user.setLoginStatus(LoginStatus.Success);
             userRepository.save(user);
-            return new ResponseEntity("User Successfully Login", HttpStatus.OK);
+            return user;
         }
         else {
             user.setLoginStatus(LoginStatus.Fail);
@@ -69,20 +76,24 @@ public class UserService {
     }
 
 
-    public ResponseEntity getAllUsers() {
-        List<User> userList = userRepository.findAll();
-        List<Map<String, Object>> userAccountInfo = new ArrayList<>();
-        for(User user:userList)
-        {
-            Map<String, Object> data = new HashMap<>();
-            data.put("userName",user.getUserName());
-            data.put("userEmail",user.getEmail());
-            accountRepository.findByUser(user).getUserId();
-            userAccountInfo.add(data);
-        }
-        return new  ResponseEntity(userAccountInfo,HttpStatus.OK);
+    public ResponseEntity getAccount(Long accountNo) {
+        Account account = accountRepository.findByAccountNo(accountNo);
+        if (account == null)
+            throw new AccountNotFoundException();
+            User user = userRepository.findById(account.getUser().getUserId()).get();
+            Map<String,Object>map=new HashMap<>();
+            map.put("accountNo",account.getAccountNo());
+            map.put("Balance",account.getBalance());
+            map.put("BankName",account.getBankName());
+            map.put("UserName",user.getUserName());
+            map.put("mail",user.getEmail());
+            return new ResponseEntity(map,HttpStatus.OK);
     }
 
+    public ResponseEntity deleteAccount(Long accountNo) {
+        accountRepository.deleteById(accountNo);
+        return new ResponseEntity("Account Delete Successfully",HttpStatus.OK);
+    }
 }
 
 

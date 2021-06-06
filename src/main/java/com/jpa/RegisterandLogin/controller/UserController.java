@@ -37,7 +37,7 @@ public class UserController {
 	public ResponseEntity<User> loginUser(@RequestParam(required = true, value = "email") String email,
 										  @RequestParam(required = true, value = "password")String password ){
 	 	User user= userService.loginUser(email, password);
-		return new ResponseEntity(user, HttpStatus.OK);
+		return new ResponseEntity(user.getUserName()+ " " +"is Login SuccessFully", HttpStatus.OK);
 	}
 
 	@GetMapping("/get/{accountNo}")

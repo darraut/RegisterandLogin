@@ -29,10 +29,10 @@ public class BenificiaryController  {
 		
 	}
 
-	@GetMapping("get/{benificaryaccountno}/{accountno}")
+	@GetMapping("/get/{benificaryaccountno}/{accountno}")
 	ResponseEntity getBenificary(@PathVariable(required = true,value = "benificaryaccountno")Long benificaryAcc,
 								 @PathVariable(required = true,value = "accountno")Long accountNo){
-			return benificiaryService.getBenificary(benificaryAcc,accountNo);
+		return new ResponseEntity(benificiaryService.getBenificary(benificaryAcc,accountNo),HttpStatus.OK);
 	}
 
 

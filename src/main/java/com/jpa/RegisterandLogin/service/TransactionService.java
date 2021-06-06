@@ -4,6 +4,7 @@ import com.jpa.RegisterandLogin.DTO.FundTransferDTO;
 import com.jpa.RegisterandLogin.entities.*;
 import com.jpa.RegisterandLogin.exception.AccountNotFoundException;
 import com.jpa.RegisterandLogin.exception.BalanceInefficient;
+import com.jpa.RegisterandLogin.exception.BenificaryAccountException;
 import com.jpa.RegisterandLogin.exception.UserNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,12 @@ public class TransactionService {
 
 
 	public ResponseEntity fundTransfer(FundTransferDTO fundTransferDTO) throws UserNotFoundException {
-		Optional<User> userid = Optional.of(userRepository.findById(fundTransferDTO.getAccountNo()).filter(u -> u.getLoginStatus().equals(LoginStatus.Success)).get());
-		if(userid.isPresent()) {
+		boolean userid = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo()).getUser().getLoginStatus().equals(LoginStatus.Success);
+		if(userid) {
 			Account accountNo = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo());
 			Benificiary benificiary = benificiaryRepository.findByAccountNoAndBenificaryAccount(accountNo, fundTransferDTO.getBenificaryAccount());
 			if (benificiary != null) {
-				double userBalance = accountRepository.findById(benificiary.getAccountNo().getAccountNo()).map(Account::getBalance).get();
+				double userBalance = accountRepository.findByAccountNo(benificiary.getAccountNo().getAccountNo()).getBalance();
 				if (fundTransferDTO.getTransferAmount() <= userBalance) {
 					double minusBalance = 0.00;
 					minusBalance = userBalance - fundTransferDTO.getTransferAmount();
@@ -54,18 +55,18 @@ public class TransactionService {
 					transaction.setBenificaryAccount(fundTransferDTO.getBenificaryAccount());
 					transactionRepository.save(transaction);
 					benificiary.setBalance(benificiary.getBalance() + fundTransferDTO.getTransferAmount());
-					benificiary.setAccountNo(accountRepository.findById(fundTransferDTO.getAccountNo()).get());
+					benificiary.setAccountNo(accountRepository.findByAccountNo(fundTransferDTO.getAccountNo()));
 					benificiary.setBenificaryAccount(fundTransferDTO.getBenificaryAccount());
 					benificiary.setCreditAmount(fundTransferDTO.getTransferAmount());
 					benificiary.setBankname(fundTransferDTO.getBankName());
 					benificiaryRepository.save(benificiary);
 					accountService.updateBalance(minusBalance, fundTransferDTO.getAccountNo());
-					return new ResponseEntity("Transaction done Successfully", HttpStatus.OK);
+					return new ResponseEntity(fundTransferDTO.getTransferAmount() +" " +"Amount Transfer SuccessFully", HttpStatus.OK);
 				} else
 					throw new BalanceInefficient();
 			}
 		}
-		throw new AccountNotFoundException();
+		throw new BenificaryAccountException();
 	}
 
 	public ResponseEntity getTransaction(Long accountNo, Long beneficaryAccount) {

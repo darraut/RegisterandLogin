@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -20,6 +21,7 @@ public class Transaction extends BaseEntitySeq {
     private Long transactionId;
 
     @Column
+    @NotNull
     private Long accountNo;
 
     @Column
@@ -29,9 +31,11 @@ public class Transaction extends BaseEntitySeq {
     private Double balance;
 
     @Column
+    @NotNull
     private Long benificaryAccount;
 
     @Column
+    @NotNull
     private Double transferAmount;
 
 

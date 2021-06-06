@@ -54,7 +54,7 @@ public class UserService {
             userDetails.setAccount(account);
             account.setUser(userDetails);
             userRepository.save(userDetails);
-            return new ResponseEntity("user Register SuccessFully",HttpStatus.OK);
+            return new ResponseEntity(user.getUser().getUserName()+ " "+"Register SuccessFully",HttpStatus.OK);
         }
         throw new RuntimeException();
     }

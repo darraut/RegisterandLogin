@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class Account {
     private String bankName;
 
     @Column
+    @NotNull(message = "Should be in digit format")
     private double balance;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

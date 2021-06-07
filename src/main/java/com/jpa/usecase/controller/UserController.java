@@ -3,7 +3,7 @@ package com.jpa.usecase.controller;
 
 import javax.validation.Valid;
 
-import com.jpa.usecase.DTO.UserDTO;
+import com.jpa.usecase.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class UserController {
 
 
 	@PostMapping("/signUp")
-	public ResponseEntity<User> signUpNewUser(@Valid @RequestBody UserDTO user) {
+	public ResponseEntity<User> signUpNewUser(@Valid @RequestBody UserDto user) {
 		return userService.signUpNewUser(user);
 	}
 

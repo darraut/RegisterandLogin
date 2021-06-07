@@ -1,7 +1,7 @@
 package com.jpa.usecase.service;
 
-import com.jpa.usecase.DTO.BenificaryDTO;
-import com.jpa.usecase.DTO.BenificaryListDTO;
+import com.jpa.usecase.dto.BenificaryDto;
+import com.jpa.usecase.dto.BenificaryLisDto;
 import com.jpa.usecase.entities.Account;
 import com.jpa.usecase.exception.AccountNotFoundException;
 import com.jpa.usecase.exception.BenificaryAccountException;
@@ -26,9 +26,9 @@ public class BenificiaryService {
     @Autowired
     TransactionRepository transactionRepository;
 
-    public ResponseEntity addBenificary(BenificaryDTO benificaryDTO)  {
+    public ResponseEntity addBenificary(BenificaryDto benificaryDTO)  {
         Long benificaryAcc=null;
-        for (BenificaryListDTO e: benificaryDTO.getBeneficiaryAccounts()){
+        for (BenificaryLisDto e: benificaryDTO.getBeneficiaryAccounts()){
             benificaryAcc = e.getBenificaryAccount();
         }
         Account accountNo = accountRepository.findByAccountNo(benificaryDTO.getAccountNo());

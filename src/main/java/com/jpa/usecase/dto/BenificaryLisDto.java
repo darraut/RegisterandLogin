@@ -1,10 +1,10 @@
-package com.jpa.usecase.DTO;
+package com.jpa.usecase.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
-public class BenificaryListDTO {
+public class BenificaryLisDto {
     private String bankName;
 
     @JsonIgnore

@@ -3,7 +3,7 @@ package com.jpa.usecase.service;
 
 import java.util.*;
 
-import com.jpa.usecase.DTO.UserDTO;
+import com.jpa.usecase.dto.UserDto;
 import com.jpa.usecase.entities.Account;
 import com.jpa.usecase.entities.LoginStatus;
 import com.jpa.usecase.exception.AccountNotFoundException;
@@ -31,7 +31,7 @@ public class UserService {
     @Autowired
     BenificiaryRepository benificiaryRepository;
 
-    public ResponseEntity<User> signUpNewUser(UserDTO user) throws EmailAndUserNameValidationException {
+    public ResponseEntity<User> signUpNewUser(UserDto user) throws EmailAndUserNameValidationException {
         if (StringUtils.isNotBlank(user.getUser().getEmail())) {
             User newUser = userRepository.findOneByEmailAndUserName(user.getUser().getEmail(), user.getUser().getUserName());
             if (newUser != null) {

@@ -1,6 +1,6 @@
 package com.jpa.usecase.service;
 
-import com.jpa.usecase.DTO.FundTransferDTO;
+import com.jpa.usecase.dto.FundTransferDto;
 import com.jpa.usecase.entities.*;
 import com.jpa.usecase.exception.AccountNotFoundException;
 import com.jpa.usecase.exception.BalanceInefficient;
@@ -35,7 +35,7 @@ public class TransactionService {
 	 private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 
-	public ResponseEntity<FundTransferDTO> fundTransfer(FundTransferDTO fundTransferDTO) {
+	public ResponseEntity<FundTransferDto> fundTransfer(FundTransferDto fundTransferDTO) {
 		boolean userid = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo()).getUser().getLoginStatus().equals(LoginStatus.Success);
 		if(userid) {
 			Account accountNo = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo());

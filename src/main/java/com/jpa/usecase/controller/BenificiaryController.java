@@ -1,6 +1,6 @@
 package com.jpa.usecase.controller;
 
-import com.jpa.usecase.DTO.BenificaryDTO;
+import com.jpa.usecase.dto.BenificaryDto;
 import com.jpa.usecase.service.BenificiaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class BenificiaryController  {
 
 	
 	@PostMapping("/add")
-	public ResponseEntity addBenificary(@RequestBody BenificaryDTO benificiary) {
+	public ResponseEntity addBenificary(@RequestBody BenificaryDto benificiary) {
 		return benificiaryService.addBenificary(benificiary);
 		
 	}

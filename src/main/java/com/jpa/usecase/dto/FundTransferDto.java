@@ -1,4 +1,4 @@
-package com.jpa.usecase.DTO;
+package com.jpa.usecase.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FundTransferDTO {
+public class FundTransferDto {
 
     private Long accountNo;
     private Long benificaryAccount;

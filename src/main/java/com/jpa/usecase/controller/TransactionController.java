@@ -1,6 +1,6 @@
 package com.jpa.usecase.controller;
 
-import com.jpa.usecase.DTO.FundTransferDTO;
+import com.jpa.usecase.dto.FundTransferDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class TransactionController {
 
 	
 	@PostMapping("/fundtransfer")
-	public ResponseEntity<FundTransferDTO> fundTransfer(@RequestBody FundTransferDTO fundTransferDTO) {
+	public ResponseEntity<FundTransferDto> fundTransfer(@RequestBody FundTransferDto fundTransferDTO) {
 		return transactionService.fundTransfer(fundTransferDTO);
 		
 	}

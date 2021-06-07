@@ -43,6 +43,7 @@ public class UserService {
             userDetails.setCountry(user.getUser().getCountry());
             userDetails.setPassword(user.getUser().getPassword());
             userDetails.setUserName(user.getUser().getUserName());
+            userDetails.setLoginStatus(LoginStatus.Fail);
             Account account = new Account();
             account.setBalance(user.getBalance());
             account.setBankName(user.getBankName());

@@ -56,7 +56,6 @@ public class BenificiaryService {
     public Map<String, Object> getBenificary(Long benificaryAcc, Long accountNo) {
         Account account = accountRepository.findByAccountNo(accountNo);
         Benificiary benificaryAccount = benificiaryRepository.findByAccountNoAndBenificaryAccount(account, benificaryAcc);
-        List<Map<String, Object>> data = new ArrayList<>();
         Map<String, Object> benificaryDetails = new HashMap<>();
         if (benificaryAccount == null)
             throw new BenificaryAccountException();
@@ -64,7 +63,7 @@ public class BenificiaryService {
         benificaryDetails.put("benificaryAccountNo", benificaryAccount.getBenificaryAccount());
         benificaryDetails.put("Balance", benificaryAccount.getBalance());
         benificaryDetails.put("BankName", benificaryAccount.getBankname());
-        benificaryDetails.put("UserAccountNo", benificaryAccount.getAccountNo());
+        benificaryDetails.put("UserAccountNo", benificaryAccount.getAccountNo().getAccountNo());
         return benificaryDetails;
     }
 }

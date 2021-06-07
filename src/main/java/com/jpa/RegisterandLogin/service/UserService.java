@@ -80,13 +80,12 @@ public class UserService {
         Account account = accountRepository.findByAccountNo(accountNo);
         if (account == null)
             throw new AccountNotFoundException();
-            Optional<User> user = userRepository.findById(account.getUser().getUserId());
             Map<String,Object>map=new HashMap<>();
             map.put("accountNo",account.getAccountNo());
             map.put("Balance",account.getBalance());
             map.put("BankName",account.getBankName());
-            map.put("UserName",user.get().getUserName());
-            map.put("mail",user.get().getEmail());
+            map.put("UserName",userRepository.findByUserName(account.getUser().getUserName()).getUserName());
+            map.put("mail",userRepository.findByEmail(account.getUser().getEmail()).getEmail());
             return new ResponseEntity(map,HttpStatus.OK);
     }
 

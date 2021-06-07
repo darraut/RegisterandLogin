@@ -37,7 +37,7 @@ public class TransactionService {
 	 private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 
-	public ResponseEntity fundTransfer(FundTransferDTO fundTransferDTO) throws UserNotFoundException {
+	public ResponseEntity<FundTransferDTO> fundTransfer(FundTransferDTO fundTransferDTO) {
 		boolean userid = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo()).getUser().getLoginStatus().equals(LoginStatus.Success);
 		if(userid) {
 			Account accountNo = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo());
@@ -88,7 +88,7 @@ public class TransactionService {
 			throw new AccountNotFoundException();
 	}
 
-	public ResponseEntity getAllTransaction(String searchStr, String sortBy, int pageNumber, int size, Sort.Direction sortDirection) {
+	public ResponseEntity getAllTransaction(String sortBy, int pageNumber, int size, Sort.Direction sortDirection) {
 		Map<String, Object> dataTables = new HashMap<>();
 		Sort sort = null;
 		if (StringUtils.isBlank(sortBy)) {
@@ -102,7 +102,6 @@ public class TransactionService {
 		}
 		Pageable pageable = PageRequest.of(pageNumber, size, sort);
 		Page<Transaction> page = null;
-		// page = transactionRepository.findByAccountNoContainingOrBanknameContainingOrBenificaryAccountContaining(searchStr, searchStr, searchStr, pageable);
 		page = transactionRepository.findAll(pageable);
 		List<Transaction> list = page.getContent();
 		int totalPages = page.getTotalPages();

@@ -22,7 +22,7 @@ public class TransactionController {
 
 	
 	@PostMapping("/fundtransfer")
-	public ResponseEntity fundTransfer(@RequestBody FundTransferDTO fundTransferDTO) {
+	public ResponseEntity<FundTransferDTO> fundTransfer(@RequestBody FundTransferDTO fundTransferDTO) {
 		return transactionService.fundTransfer(fundTransferDTO);
 		
 	}
@@ -35,12 +35,11 @@ public class TransactionController {
 	}
 
 	@GetMapping("/all/pagination/sort")
-	public ResponseEntity getAllTransaction(@RequestParam(required = false, value = "searchstr") String searchStr,
-											@RequestParam(required = false, value = "sortby") String sortBy,
+	public ResponseEntity getAllTransaction(@RequestParam(required = false, value = "sortby") String sortBy,
 											@RequestParam(required = true, value = "pagenumber") int pageNumber,
 											@RequestParam(required = true, value = "size") int size,
 											@RequestParam(required = true, name = "sortdirection") Sort.Direction sortDirection) {
-		return new ResponseEntity(transactionService.getAllTransaction(searchStr, sortBy, pageNumber, size, sortDirection), HttpStatus.OK);
+		return new ResponseEntity(transactionService.getAllTransaction(sortBy, pageNumber, size, sortDirection), HttpStatus.OK);
 	}
 	
 	

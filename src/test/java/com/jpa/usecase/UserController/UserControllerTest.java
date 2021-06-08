@@ -1,53 +1,33 @@
 package com.jpa.usecase.UserController;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jpa.usecase.dto.UserDto;
 import com.jpa.usecase.controller.UserController;
+import com.jpa.usecase.dto.UserDto;
 import com.jpa.usecase.entities.Account;
 import com.jpa.usecase.entities.LoginStatus;
 import com.jpa.usecase.entities.User;
-import com.jpa.usecase.exception.EmailAndUserNameValidationException;
 import com.jpa.usecase.service.UserService;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@AutoConfigureTestDatabase(replace = Replace.NONE)
 @SpringBootTest
-@AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+class UserControllerTest {
 
 
     @Mock
@@ -77,7 +57,7 @@ public class UserControllerTest {
         user.setAccount(account);
         user.setCountry("IN");
         user.setEmail("darshan@gmail.com");
-        user.setLoginStatus(LoginStatus.Success);
+        user.setLoginStatus(LoginStatus.success);
         user.setPassword("Darshan@123");
         user.setUserId(1L);
         user.setUserName("Darshan95");

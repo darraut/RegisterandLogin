@@ -36,7 +36,7 @@ public class TransactionService {
 
 
 	public ResponseEntity<FundTransferDto> fundTransfer(FundTransferDto fundTransferDTO) {
-		boolean userid = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo()).getUser().getLoginStatus().equals(LoginStatus.Success);
+		boolean userid = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo()).getUser().getLoginStatus().equals(LoginStatus.success);
 		if(userid) {
 			Account accountNo = accountRepository.findByAccountNo(fundTransferDTO.getAccountNo());
 			Benificiary benificiary = benificiaryRepository.findByAccountNoAndBenificaryAccount(accountNo, fundTransferDTO.getBenificaryAccount());

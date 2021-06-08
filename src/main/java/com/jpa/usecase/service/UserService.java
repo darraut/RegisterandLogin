@@ -39,7 +39,7 @@ public class UserService {
             userDetails.setCountry(user.getUser().getCountry());
             userDetails.setPassword(user.getUser().getPassword());
             userDetails.setUserName(user.getUser().getUserName());
-            userDetails.setLoginStatus(LoginStatus.Fail);
+            userDetails.setLoginStatus(LoginStatus.fail);
             Account account = new Account();
             account.setBalance(user.getBalance());
             account.setBankName(user.getBankName());
@@ -57,12 +57,12 @@ public class UserService {
         if(user==null)
             throw new UserNotFoundException();
         else if (user.getEmail().equals(email) && password.equals(user.getPassword())) {
-            user.setLoginStatus(LoginStatus.Success);
+            user.setLoginStatus(LoginStatus.success);
             userRepository.save(user);
             return user;
         }
         else {
-            user.setLoginStatus(LoginStatus.Fail);
+            user.setLoginStatus(LoginStatus.fail);
             throw new RuntimeException();
         }
     }

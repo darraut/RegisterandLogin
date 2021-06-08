@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import com.jpa.usecase.entities.User;
 import com.jpa.usecase.service.UserService;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -27,16 +26,17 @@ public class UserController {
 
 
 	@PostMapping("/signUp")
-	public ResponseEntity<UserDto> signUpNewUser(@Valid @RequestBody UserDto user) {
+	public ResponseEntity<User> signUpNewUser(@Valid @RequestBody UserDto user) {
 		User userDetails = userService.signUpNewUser(user);
-		return new ResponseEntity(userDetails.getUserName()+ " "+"Successfully Register",HttpStatus.CREATED);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(userDetails);
 	}
 
 	@GetMapping("/login")
 	public ResponseEntity<User> loginUser(@RequestParam(required = true, value = "email") String email,
 										  @RequestParam(required = true, value = "password")String password ){
 	 	User user= userService.loginUser(email, password);
-		return new ResponseEntity(user.getUserName()+ " " +"is Login SuccessFully", HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(user);
 	}
 
 	@GetMapping("/get/{accountNo}")

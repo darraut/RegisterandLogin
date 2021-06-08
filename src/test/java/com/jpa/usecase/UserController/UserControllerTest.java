@@ -87,10 +87,7 @@ public class UserControllerTest {
         userDto.setBankName("ICICI");
         userDto.setUser(user);
 
-
-
     }
-
 
     @Test
     @DisplayName("User Registration : Positive scenario")
@@ -98,50 +95,26 @@ public class UserControllerTest {
 
         Mockito.when(userService.signUpNewUser(userDto)).thenReturn(user);
 
-        ResponseEntity<UserDto> newUser = userController.signUpNewUser(userDto);
+        ResponseEntity<User> newUser = userController.signUpNewUser(userDto);
 
         verify(userService).signUpNewUser(userDto);
 
-        assertEquals("Darshan95 Successfully Register", newUser.getBody());
+        assertEquals(user, newUser.getBody());
 
     }
 
-    @Test
-    @DisplayName("User Registration : Negative scenario")
-    void notSignUpNewUser() {
-
-
-        Mockito.when(userService.signUpNewUser(userDto)).thenReturn(null);
-
-        User newUser = userService.signUpNewUser(userDto);
-
-        assertNull(newUser);
-
-
-    }
 
     @Test
     @DisplayName("Login : Positive scenario")
     void loginUser() {
 
-        String expectResult="Darshan95 is Login SuccessFully";
         Mockito.when(userService.loginUser("Darshan@gmail.com", "Darshan@123")).thenReturn(user);
 
         ResponseEntity<User> newUser = userController.loginUser("Darshan@gmail.com", "Darshan@123");
 
-        assertEquals(expectResult,newUser.getBody());
+        assertEquals(user,newUser.getBody());
     }
 
-    @Test
-    @DisplayName("Login : Negative scenario")
-    void loginUserFail() {
-        User user = new User("Darshan@gmail.com", "Darshan@123");
-        Mockito.when(userService.loginUser(anyString(), anyString())).thenReturn(null);
-
-        User newUser = userService.loginUser("Darshan@gmail.com", "Darshan@123");
-
-        assertNull(newUser);
-    }
 
     @Test
     @DisplayName("GetUserAccountById : Positive scenario")

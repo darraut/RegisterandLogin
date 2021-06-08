@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RegisterandLoginApplication {
+public class FundTransferUseCase {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RegisterandLoginApplication.class, args);
+		SpringApplication.run(FundTransferUseCase.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.jpa.usecase.Utility;
+package com.jpa.usecase.utility;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

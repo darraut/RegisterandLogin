@@ -9,8 +9,6 @@ import com.jpa.usecase.entities.LoginStatus;
 import com.jpa.usecase.exception.AccountNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -28,10 +26,8 @@ public class UserService {
     @Autowired
     AccountRepository accountRepository;
 
-    @Autowired
-    BenificiaryRepository benificiaryRepository;
 
-    public ResponseEntity<User> signUpNewUser(UserDto user) throws EmailAndUserNameValidationException {
+    public User signUpNewUser(UserDto user)  {
         if (StringUtils.isNotBlank(user.getUser().getEmail())) {
             User newUser = userRepository.findOneByEmailAndUserName(user.getUser().getEmail(), user.getUser().getUserName());
             if (newUser != null) {
@@ -50,7 +46,7 @@ public class UserService {
             userDetails.setAccount(account);
             account.setUser(userDetails);
             userRepository.save(userDetails);
-            return new ResponseEntity(user.getUser().getUserName()+ " "+"Register SuccessFully",HttpStatus.OK);
+            return userDetails;
         }
         throw new RuntimeException();
     }
@@ -72,7 +68,7 @@ public class UserService {
     }
 
 
-    public ResponseEntity getAccount(Long accountNo) {
+    public Map<String, Object> getAccount(Long accountNo) {
         Account account = accountRepository.findByAccountNo(accountNo);
         if (account == null)
             throw new AccountNotFoundException();
@@ -82,12 +78,16 @@ public class UserService {
             map.put("BankName",account.getBankName());
             map.put("UserName",userRepository.findByUserName(account.getUser().getUserName()).getUserName());
             map.put("mail",userRepository.findByEmail(account.getUser().getEmail()).getEmail());
-            return new ResponseEntity(map,HttpStatus.OK);
+            return map;
     }
 
-    public ResponseEntity deleteAccount(Long accountNo) {
-        accountRepository.deleteById(accountNo);
-        return new ResponseEntity("Account Delete Successfully",HttpStatus.OK);
+    public Account deleteAccount(Long accountNo) {
+        Account account = accountRepository.findByAccountNo(accountNo);
+        if (account == null)
+            throw new AccountNotFoundException();
+
+            accountRepository.deleteById(account.getAccountNo());
+            return account;
     }
 }
 

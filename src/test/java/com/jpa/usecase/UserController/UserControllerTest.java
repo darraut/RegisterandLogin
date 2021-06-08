@@ -3,15 +3,20 @@ package com.jpa.usecase.UserController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jpa.usecase.DTO.UserDTO;
+import com.jpa.usecase.dto.UserDto;
 import com.jpa.usecase.controller.UserController;
+import com.jpa.usecase.entities.Account;
 import com.jpa.usecase.entities.LoginStatus;
 import com.jpa.usecase.entities.User;
+import com.jpa.usecase.exception.EmailAndUserNameValidationException;
 import com.jpa.usecase.service.UserService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -28,8 +33,12 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -38,84 +47,125 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+public class UserControllerTest {
 
 
-    @MockBean
+    @Mock
     private UserService userService;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
     private UserController userController;
 
+    static UserDto userDto;
 
+    static User user;
+
+    static Account account;
+
+
+
+    @BeforeAll
+    public static void setUp() {
+
+        account = new Account();
+        account.setAccountNo(1L);
+        account.setBalance(20000.00);
+        account.setBankName("ICICI");
+        account.setBenificiryAccountList(null);
+        account.setUser(user);
+        user = new User();
+        user.setAccount(account);
+        user.setCountry("IN");
+        user.setEmail("darshan@gmail.com");
+        user.setLoginStatus(LoginStatus.Success);
+        user.setPassword("Darshan@123");
+        user.setUserId(1L);
+        user.setUserName("Darshan95");
+
+        userDto = new UserDto();
+        userDto.setBalance(2000.00);
+        userDto.setBankName("ICICI");
+        userDto.setUser(user);
+
+
+
+    }
 
 
     @Test
-    @DisplayName("Registration : Positive scenario")
-    void signUpNewUser() throws Exception {
-        UserDTO userDTO= new UserDTO();
-        userDTO.setBankName("ICICI");
-        userDTO.setBalance(2000.00);
-        User newUser=new User(1L,"Darshan","Darshan@123","Darshan@123","IN",LoginStatus.Success);
-        userDTO.setUser(newUser);
-        ResponseEntity<User> entity =new ResponseEntity(HttpStatus.OK);
-        String URI = "/api/user/signUp";
-        Mockito.when(userService.signUpNewUser(any(UserDTO.class))).thenReturn(entity);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post(URI)
-                .accept(MediaType.APPLICATION_JSON).content(mapToJson(newUser)).contentType(MediaType.APPLICATION_JSON);
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        MockHttpServletResponse response
-                = result.getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    @DisplayName("User Registration : Positive scenario")
+    void signUpNewUser() {
+
+        Mockito.when(userService.signUpNewUser(userDto)).thenReturn(user);
+
+        ResponseEntity<UserDto> newUser = userController.signUpNewUser(userDto);
+
+        verify(userService).signUpNewUser(userDto);
+
+        assertEquals("Darshan95 Successfully Register", newUser.getBody());
+
     }
+
     @Test
-    @DisplayName("Registration : Positive scenario")
-    void signUpNewUser1() throws Exception {
-        UserDTO userDTO= new UserDTO();
-        userDTO.setBankName("ICICI");
-        userDTO.setBalance(2000.00);
-        User newUser=new User(1L,"Darshan","Darshan@123","Darshan@123","IN",LoginStatus.Success);
-        userDTO.setUser(newUser);
-        ResponseEntity<User> entity =new ResponseEntity(newUser,HttpStatus.OK);
+    @DisplayName("User Registration : Negative scenario")
+    void notSignUpNewUser() {
 
-        Mockito.when(userService.signUpNewUser(any())).thenReturn(entity);
-        ResponseEntity<User>responseEntity=userService.signUpNewUser(userDTO);
-        assertEquals(newUser,userDTO.getUser());
-        assertEquals(responseEntity.getStatusCodeValue(),HttpStatus.OK.value());
+
+        Mockito.when(userService.signUpNewUser(userDto)).thenReturn(null);
+
+        User newUser = userService.signUpNewUser(userDto);
+
+        assertNull(newUser);
+
 
     }
+
     @Test
     @DisplayName("Login : Positive scenario")
-    void loginUser() throws Exception {
-        User user=new User("Darshan@gmail.com","Darshan@123");
-        Mockito.when(userService.loginUser(any(),any())).thenReturn(user);
-        User newUser= userService.loginUser("Darshan@gmail.com","Darshan@123");
-        assertNotNull(newUser);
-        assertEquals(user.getEmail(),newUser.getEmail());
-        assertEquals(user.getPassword(),newUser.getPassword());
-        assertEquals(user,newUser);
+    void loginUser() {
+
+        Mockito.when(userService.loginUser("Darshan@gmail.com", "Darshan@123")).thenReturn(user);
+
+        ResponseEntity<User> newUser = userController.loginUser("Darshan@gmail.com", "Darshan@123");
+
+        assertEquals("Darshan95 is Login SuccessFully",newUser.getBody());
     }
 
     @Test
     @DisplayName("Login : Negative scenario")
     void loginUserFail() {
-        User user=new User("","Darshan@123");
-        Mockito.when(userService.loginUser(notNull(),notNull())).thenReturn(user);
-        User newUser= userService.loginUser("","Darshan@123");
-        assertSame(user,newUser);
+        User user = new User("Darshan@gmail.com", "Darshan@123");
+        Mockito.when(userService.loginUser(anyString(), anyString())).thenReturn(null);
+
+        User newUser = userService.loginUser("Darshan@gmail.com", "Darshan@123");
+
+        assertNull(newUser);
     }
 
+    @Test
+    @DisplayName("GetUserAccountById : Positive scenario")
+    void getUserAccountById()  {
+
+        Map<String,Object>userAccountMap = new HashMap<>();
+        userAccountMap.put("accountNo",account.getAccountNo());
+        userAccountMap.put("Balance",account.getBalance());
+        userAccountMap.put("BankName",account.getBankName());
+        userAccountMap.put("UserName",user.getUserName());
+        userAccountMap.put("mail",user.getEmail());
 
 
+        Mockito.when(userService.getAccount(1L)).thenReturn(userAccountMap);
 
+        ResponseEntity<Account> userAccount=  userController.getAccount(1L);
 
+        verify(userService).getAccount(1L);
 
+        assertEquals(userAccountMap,userAccount.getBody());
 
-    private String mapToJson(Object object) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(object);
     }
-
 }
+
+
+
+
+

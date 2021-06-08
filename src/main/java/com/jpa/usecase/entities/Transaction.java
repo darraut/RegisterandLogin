@@ -1,6 +1,6 @@
 package com.jpa.usecase.entities;
 
-import com.jpa.usecase.Utility.BaseEntitySeq;
+import com.jpa.usecase.utility.BaseEntitySeq;
 import lombok.Data;
 
 import javax.persistence.Column;

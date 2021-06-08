@@ -4,6 +4,7 @@ package com.jpa.usecase.controller;
 import javax.validation.Valid;
 
 import com.jpa.usecase.dto.UserDto;
+import com.jpa.usecase.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import com.jpa.usecase.entities.User;
 import com.jpa.usecase.service.UserService;
 
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -24,8 +27,9 @@ public class UserController {
 
 
 	@PostMapping("/signUp")
-	public ResponseEntity<User> signUpNewUser(@Valid @RequestBody UserDto user) {
-		return userService.signUpNewUser(user);
+	public ResponseEntity<UserDto> signUpNewUser(@Valid @RequestBody UserDto user) {
+		User userDetails = userService.signUpNewUser(user);
+		return new ResponseEntity(userDetails.getUserName()+ " "+"Successfully Register",HttpStatus.CREATED);
 	}
 
 	@GetMapping("/login")
@@ -36,13 +40,16 @@ public class UserController {
 	}
 
 	@GetMapping("/get/{accountNo}")
-	public ResponseEntity getAccount(@PathVariable(name = "accountNo", required = true) Long accountNo){
-		return userService.getAccount(accountNo);
+	public ResponseEntity<Account> getAccount(@PathVariable(name = "accountNo", required = true) Long accountNo){
+		Map<String,Object>data = userService.getAccount(accountNo);
+		return new ResponseEntity(data, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{accountNo}")
-	public ResponseEntity deleteAccount(@PathVariable(name = "accountNo", required = true) Long accountNo) {
-		return userService.deleteAccount(accountNo);
+	public ResponseEntity<Account> deleteAccount(@PathVariable(name = "accountNo", required = true) Long accountNo) {
+		 userService.deleteAccount(accountNo);
+		 return new ResponseEntity("Account deleted SuccessFully",HttpStatus.OK);
+
 	}
 }
 

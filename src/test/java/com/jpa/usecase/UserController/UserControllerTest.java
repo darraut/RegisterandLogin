@@ -124,11 +124,12 @@ public class UserControllerTest {
     @DisplayName("Login : Positive scenario")
     void loginUser() {
 
+        String expectResult="Darshan95 is Login SuccessFully";
         Mockito.when(userService.loginUser("Darshan@gmail.com", "Darshan@123")).thenReturn(user);
 
         ResponseEntity<User> newUser = userController.loginUser("Darshan@gmail.com", "Darshan@123");
 
-        assertEquals("Darshan95 is Login SuccessFully",newUser.getBody());
+        assertEquals(expectResult,newUser.getBody());
     }
 
     @Test

@@ -28,7 +28,6 @@ public class UserController {
 	@PostMapping("/signUp")
 	public ResponseEntity<User> signUpNewUser(@Valid @RequestBody UserDto user) {
 		User userDetails = userService.signUpNewUser(user);
-
 		return ResponseEntity.status(HttpStatus.CREATED).body(userDetails);
 	}
 

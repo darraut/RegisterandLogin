@@ -32,7 +32,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(EmailAndUserNameValidationException.class)
-    public ResponseEntity<Object> handleExceptions(EmailAndUserNameValidationException exception, WebRequest webRequest) {
+    public ResponseEntity<Object> emailAndUserNameValidationException(EmailAndUserNameValidationException exception, WebRequest webRequest) {
         ExceptionResponse response = new ExceptionResponse();
         response.setDateTime(LocalDateTime.now());
         response.setMessage("Email or Username Already Exits");

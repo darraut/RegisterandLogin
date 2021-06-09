@@ -1,10 +1,12 @@
 package com.jpa.usecase.UserController;
 
-import com.jpa.usecase.controller.UserController;
+import ch.qos.logback.core.boolex.EvaluationException;
 import com.jpa.usecase.dto.UserDto;
 import com.jpa.usecase.entities.Account;
 import com.jpa.usecase.entities.LoginStatus;
 import com.jpa.usecase.entities.User;
+import com.jpa.usecase.exception.EmailAndUserNameValidationException;
+import com.jpa.usecase.exception.GlobalException;
 import com.jpa.usecase.service.UserRepository;
 import com.jpa.usecase.service.UserService;
 import org.junit.jupiter.api.*;
@@ -13,21 +15,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.WebRequest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @SpringBootTest
-@AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
@@ -69,19 +67,46 @@ class UserServiceTest {
 
     }
 
-    /*@Test
+    @Test
     @DisplayName("User Registration : Positive scenario")
     void signUpNewUser() {
+        User user1 = new User();
+        user1.setAccount(account);
+        user1.setCountry("IN");
+        user1.setEmail("Vijay@gmail.com");
+        user1.setLoginStatus(LoginStatus.success);
+        user1.setPassword("Vjiay@123");
+        user1.setUserId(1L);
+        user1.setUserName("Vijay95");
 
-        Mockito.when(userRepository.findOneByEmailAndUserName("darshan@gmail.com","Darshan95")).thenReturn(user);
+        Mockito.when(userRepository.findOneByEmailAndUserName(user.getEmail(), user.getUserName())).thenReturn(user1);
 
         User result = userService.signUpNewUser(userDto);
 
-        verify(userService).signUpNewUser(userDto);
+        verify(userRepository).findOneByEmailAndUserName(user.getEmail(), user.getUserName());
 
-        assertEquals(user, result);
+        assertNotEquals(user1,result);
 
     }
-*/
+
+    @DisplayName("User Registration : Exception")
+    @Test
+    void signUpNewUserFail() {
+        User user1 = new User();
+        user1.setAccount(account);
+        user1.setCountry("IN");
+        user1.setEmail("Vijay@gmail.com");
+        user1.setLoginStatus(LoginStatus.success);
+        user1.setPassword("Vjiay@123");
+        user1.setUserId(1L);
+        user1.setUserName("Vijay95");
+
+
+        Mockito.when(userRepository.findOneByEmailAndUserName(user.getEmail(),user.getUserName())).thenThrow(new EmailAndUserNameValidationException());
+
+        Exception ex = assertThrows(EmailAndUserNameValidationException.class, () -> userService.signUpNewUser(userDto));
+
+    }
+
 
 }
